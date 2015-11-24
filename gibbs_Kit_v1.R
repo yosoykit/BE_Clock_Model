@@ -1,3 +1,5 @@
+## This is the BE clock Gibbs sampler
+
 gibbs <- function(x,L=100,K=100,skip=10,plot=T) {
   if (!is.list(x)) {
 	cat("x is not a list! see help file", "\n")
@@ -299,11 +301,11 @@ id.age = order(ages)
 pd_sex_ordered=pd_sex_orderedgen 
 sum_matrixtemp = sum_matrixgen_ccf
 ## fBE data
-N=22
-ages=Age.FBE
+N=21
+ages=Age.FBE[-1]
 id.age = order(ages)
-pd_sex_ordered=pd_sex_orderedfBE
-sum_matrixtemp = sum_matrixFBE_ccf
+pd_sex_ordered=pd_sex_orderedfBE[-1]
+sum_matrixtemp = sum_matrixFBE_ccf[,-1]
 ## BE w HGD data
 N=10
 ages=Age.BEwHGD
@@ -391,8 +393,8 @@ count=1
 for ( k in 1:(burnend-burnin)){
   temp = sum((pd$Age.at.biopsy - outgen_ccf[k,1:N2])/(pd$Age.at.biopsy))
   sum1[count] = temp/N2
-   temp = sum((Age.FBE - outFBE_ccf[k,1:N3])/(Age.FBE))
-   sum2[count] = temp/N3
+   temp = sum((Age.FBE[-3] - outFBE_ccf[k,(1:N3)[-3]])/(Age.FBE[-3]))
+   sum2[count] = temp/(N3-1)
   # temp = sum((Age.BEwHGD - out_BEwHGD[k,1:N4])/(Age.BEwHGD))
   # sum3[count] = temp/N4
   count=count+1
@@ -406,8 +408,8 @@ for ( k in 1:(burnend-burnin)){
   prior_temp = runif(30,0,pd$Age.at.biopsy)
   temp = sum((pd$Age.at.biopsy - prior_temp)/(pd$Age.at.biopsy))
   sum1_p[count] = temp/N2
-  prior_temp = runif(22,0,Age.FBE)
-  temp = sum((Age.FBE - prior_temp)/(Age.FBE))
+  prior_temp = runif(21,0,Age.FBE)
+  temp = sum((Age.FBE[-3] - prior_temp)/(Age.FBE[-3]))
   sum2_p[count] = temp/N3
   #prior_temp = runif(10,0,Age.BEwHGD)
   #temp = sum((Age.BEwHGD -prior_temp)/(Age.BEwHGD))
