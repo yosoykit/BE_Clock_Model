@@ -1,4 +1,5 @@
 gibbs <- function(x,L=100,K=100,skip=10,plot=T) {
+  ## git test
   if (!is.list(x)) {
 	cat("x is not a list! see help file", "\n")
 	return()
