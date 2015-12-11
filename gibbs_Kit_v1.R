@@ -58,9 +58,11 @@ sd_b_i = rep(sd(CpGs.D1.67$b.slope),67)
 N=length(age)
 sum_matrixFBE = matrix(rep(0,5*N),ncol=N)
 
-#################
-## 3) ALL data ##
-#################
+##############################################################
+## 3) ALL data MCMC LOOP OVER ALL INDIVIDUALS IN DATA SET ##
+##      Records medians, quartiles, and 95% CI            ##
+##      for BE onset ages inferred for each patient       ##
+##############################################################
 ## Number of MCMC cycles to run for each patient
 runs = 100000
 M=length(id)
@@ -84,9 +86,10 @@ for (i in 2:N){
   ## start slopes at mean values from regressions
   x$est[1:M] = mean_b_i
 
-  ## estimates of standard deviations for dnorm, implicit uniform prior
+  ## estimates of standard deviations for dnorm, will be given gamma prior distribution
   x$est[M+2] = 1.2 #sigma_BEstart
   print(i)
+  ## Call function gibbs that runs gibbs sampler for this patient for runs # of cycles
   out = gibbs(x,L=runs,K=500,skip=10,plot=T)
   out_temp[,i] = out[,(M+1)]
   s = quantile(out[,(M+1)],probs=c(.025,.25,.5,.75,.975))
