@@ -24,7 +24,7 @@ library(siggenes)
 ## 1) The following data set D1 was used for SELECTION of marker set as the bigger of the two serial sets
 ########################################################
 
-load('./CISNETRcode/Illum450kAkaz20140716/data/gset.nfilt.rda',verbose=T)
+load('gset.nfilt.rda',verbose=T)
 
 
 mval = getM(gset)
@@ -175,6 +175,7 @@ CpGs.D1.67$cpgn = CpGs[ido.diff[ids1]]
 ## Note: could use same regression scheme above for DV and obtain drift rates to use in prior
 
 CpGs.D1.67$b.slope = up_drift_rates[ids1]
+save(CpGs.D1.67, "CpGs.D1.67.rda")
 
 ## This completes the script for "cpgn" marker name selection (67 total in above pipeline)
 ## + drift rates for each serived from regression over longitudinal data, all kept in CpGs.D1.67
