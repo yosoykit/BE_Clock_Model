@@ -1,12 +1,12 @@
-gibbs <- function(x,L=100,K=100,skip=10,plot=T) {
+gibbs <- function(x,beM,L=100,K=100,skip=10,plot=T) {
   if (!is.list(x)) {
 	cat("x is not a list! see help file", "\n")
 	return()
       }
   names(x)[1] <- "label"
   names(x)[2] <- "est"
-  names(x)[3] <- "low"
-  names(x)[4] <- "upp"
+  #names(x)[3] <- "low"
+  #names(x)[4] <- "upp"
 
   npar <- length(x$est)
 
@@ -23,7 +23,11 @@ gibbs <- function(x,L=100,K=100,skip=10,plot=T) {
   ## data-specific setup
   ## provide: ids, ID, M, outside of function currently
   xj = beM[ids,ID]; s = y[M+1]
-  
+  ## for robustness testing with matched vs un-matched samples
+  #xj = beM[ids,ID]-sqM[ids,ID]; s = y[M+1]
+  #xj = beM[ids,ID]-(alpha_SQ_1+b_SQ_1*a); s = y[M+1]
+
+
   x.mon <- matrix(0,ncol=npar,nrow=L)
 
   for (l in 1:L) {
@@ -59,6 +63,8 @@ gibbs <- function(x,L=100,K=100,skip=10,plot=T) {
     gam.rate = 0.5*sum((xj-alpha_SQ-b_SQ*s-y[1:M]*(a-s))^2)
     dum = rgamma(1, shape=gam_1+gam.shape, rate=gam_2+gam.rate)
     y[M+2] = 1/sqrt(dum)
+    # for robustness testing with matched vs. un-matched data
+    #y[M+2] = sqrt(2)*y[M+2]
 
     x.mon[l,] <- y
     # PLOTTING OF RUNS ##
